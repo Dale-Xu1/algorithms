@@ -3,8 +3,6 @@ import Graph, { GraphProcess } from "./Graph"
 export default class HeapSort extends GraphProcess
 {
 
-    public constructor(graph: Graph) { super(graph) }
-
     private *heapify(n: number, i: number): Generator<void, void, void>
     {
         let graph = this.graph

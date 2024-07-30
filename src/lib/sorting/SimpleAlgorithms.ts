@@ -3,8 +3,6 @@ import Graph, { GraphProcess } from "./Graph"
 export class BubbleSort extends GraphProcess
 {
 
-    public constructor(graph: Graph) { super(graph) }
-
     private *sort()
     {
         let graph = this.graph
@@ -62,8 +60,6 @@ export class BubbleSort extends GraphProcess
 export class InsertionSort extends GraphProcess
 {
 
-    public constructor(graph: Graph) { super(graph) }
-
     private *sort()
     {
         let graph = this.graph
@@ -118,8 +114,6 @@ export class InsertionSort extends GraphProcess
 export class SelectionSort extends GraphProcess
 {
 
-    public constructor(graph: Graph) { super(graph) }
-
     private *sort()
     {
         let graph = this.graph
@@ -150,8 +144,6 @@ export class SelectionSort extends GraphProcess
 
 export class ShellSort extends GraphProcess
 {
-
-    public constructor(graph: Graph) { super(graph) }
 
     private *sort()
     {

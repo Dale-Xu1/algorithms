@@ -4,7 +4,8 @@ import Graph, { GraphProcess } from "./Graph"
 export default class TimSort extends GraphProcess
 {
 
-    public constructor(graph: Graph, private readonly minRun: number = 32, private readonly minGallop: number = 7) { super(graph) }
+    // private readonly minGallop: number = 7
+    public constructor(graph: Graph, private readonly minRun: number = 32) { super(graph) }
 
     private runLength!: number
     private stack: [number, number][] = []

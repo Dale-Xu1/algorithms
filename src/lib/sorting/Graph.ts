@@ -62,8 +62,6 @@ export abstract class GraphProcess
 export class Shuffle extends GraphProcess
 {
 
-    public constructor(graph: Graph) { super(graph) }
-
     private i: number = 0
 
     public override init() { }

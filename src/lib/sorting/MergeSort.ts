@@ -3,8 +3,6 @@ import Graph, { GraphProcess } from "./Graph"
 export default class MergeSort extends GraphProcess
 {
 
-    public constructor(graph: Graph) { super(graph) }
-
     private *merge(low: number, middle: number, high: number)
     {
         let graph = this.graph
