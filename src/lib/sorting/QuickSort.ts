@@ -3,6 +3,8 @@ import Graph, { GraphProcess } from "./Graph"
 export class QuickSortLL extends GraphProcess
 {
 
+    public constructor(graph: Graph) { super(graph) }
+
     private *partition(low: number, high: number)
     {
         let graph = this.graph
@@ -52,6 +54,8 @@ export class QuickSortLL extends GraphProcess
 
 export class QuickSortLR extends GraphProcess
 {
+
+    public constructor(graph: Graph) { super(graph) }
 
     private *partition(low: number, high: number)
     {

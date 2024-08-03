@@ -1,13 +1,25 @@
 <script lang="ts">
 import { onMount } from "svelte"
 
-import Maze from "../../lib/maze/Maze"
+import Maze, { MazeProcess } from "../../lib/maze/Maze"
+
+import { DepthFirstSearch, HuntAndKill } from "../../lib/maze/SimpleAlgorithms"
+import KruskalsAlgorithm from "../../lib/maze/KruskalsAlgorithm"
+import PrimsAlgorithm from "../../lib/maze/PrimsAlgorithm"
+// TODO: Row-based: Eller, Sidewinder, Binary
+// TODO: Random walks: Aldous-Broder, Wilson (extension necessary)
+// TODO: Division?
+
+const SIZE: number = 10
 
 let canvas: HTMLCanvasElement
 let c: CanvasRenderingContext2D
 
-const SIZE: number = 20
+let algorithms = [HuntAndKill] // [KruskalsAlgorithm, PrimsAlgorithm, DepthFirstSearch]
+let index: number = 0
+
 let maze: Maze
+let process: MazeProcess
 
 onMount(() =>
 {
@@ -17,7 +29,10 @@ onMount(() =>
     let ratio = window.devicePixelRatio
     let width = Math.floor(canvas.width / ratio / SIZE), height = Math.floor(canvas.height / ratio / SIZE)
 
-    maze = new Maze(width, height)
+    maze = new Maze(width, height, 3)
+    process = new algorithms[index](maze)
+    process.init()
+
     requestAnimationFrame(loop)
 })
 
@@ -25,8 +40,25 @@ function loop()
 {
     requestAnimationFrame(loop)
 
+    for (let i = 0; i < 20; i++)
+    {
+        process.update()
+        if (process.finished)
+        {
+            // maze.validateUndirected()
+            // maze.reset()
+
+            // if (++index >= algorithms.length) index = 0
+            // process = new algorithms[index](maze)
+            // process.init()
+
+            break
+        }
+    }
+
     c.clearRect(0, 0, canvas.width, canvas.height)
     maze.render(c)
+    maze.update()
 }
 
 function resize()

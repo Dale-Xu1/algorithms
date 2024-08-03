@@ -19,14 +19,17 @@ export default class Graph
         for (let i of indices) this.active[i] = this.lifetime
     }
 
+    public update()
+    {
+        for (let i = 0; i < this.length; i++) if (this.active[i] > 0) this.active[i]--
+    }
+
     public render(c: CanvasRenderingContext2D)
     {
         let width = c.canvas.width, height = c.canvas.height
         for (let i = 0; i < this.length; i++)
         {
-            c.fillStyle = this.active[i] > 0 ? "#ff0000" : "#ffffff"
-            // `hsl(0, 100%, ${50 + (this.lifetime - this.active[i]) / this.lifetime * 50}%)`
-            if (this.active[i] > 0) this.active[i]--
+            c.fillStyle = `hsl(0, 100%, ${50 + (this.lifetime - this.active[i]) / this.lifetime * 50}%)`
 
             let w = width / this.length, h = this.values[i] * height
             c.fillRect(i * w, height - h, w + 1, h)
@@ -61,6 +64,8 @@ export abstract class GraphProcess
 
 export class Shuffle extends GraphProcess
 {
+
+    public constructor(graph: Graph) { super(graph) }
 
     private i: number = 0
 

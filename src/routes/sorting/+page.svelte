@@ -13,7 +13,7 @@ import { RadixSortLSD, RadixSortMSD } from "../../lib/sorting/RadixSort"
 let canvas: HTMLCanvasElement
 let c: CanvasRenderingContext2D
 
-let graph: Graph = new Graph(1000, 1)
+let graph: Graph = new Graph(1000, 2)
 let queue: GraphProcess[] = []
 let current: GraphProcess | null = null
 
@@ -29,7 +29,6 @@ onMount(() =>
 
 function loop()
 {
-    requestAnimationFrame(loop)
     if (current === null && queue.length > 0)
     {
         current = queue.shift()!
@@ -41,7 +40,7 @@ function loop()
         current.update()
         if (current.finished)
         {
-            // if (!(current instanceof Shuffle)) graph.validate()
+            if (!(current instanceof Shuffle)) graph.validate()
             current = null
             break
         }
@@ -49,6 +48,9 @@ function loop()
 
     c.clearRect(0, 0, canvas.width, canvas.height)
     graph.render(c)
+    graph.update()
+
+    requestAnimationFrame(loop)
 }
 
 function resize()

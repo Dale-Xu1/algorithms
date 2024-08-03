@@ -3,6 +3,8 @@ import Graph, { GraphProcess } from "./Graph"
 export default class BitonicSort extends GraphProcess
 {
 
+    public constructor(graph: Graph) { super(graph) }
+
     private *merge(low: number, n: number, direction: boolean): Generator<void, void, void>
     {
         if (n <= 1) return
