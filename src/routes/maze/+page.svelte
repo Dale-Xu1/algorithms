@@ -6,6 +6,8 @@ import Maze, { MazeProcess } from "../../lib/maze/Maze"
 import { BinaryTree, BreadthFirstSearch, DepthFirstSearch, HuntAndKill, Sidewinder } from "../../lib/maze/SimpleAlgorithms"
 import KruskalsAlgorithm from "../../lib/maze/KruskalsAlgorithm"
 import PrimsAlgorithm from "../../lib/maze/PrimsAlgorithm"
+import BraidMaze from "../../lib/maze/BraidMaze"
+
 // TODO: Eller
 // TODO: Aldous-Broder, Wilson (extension necessary)
 // TODO: Recursive division (new rendering system necessary)
@@ -15,7 +17,7 @@ const SIZE: number = 10
 let canvas: HTMLCanvasElement
 let c: CanvasRenderingContext2D
 
-let algorithms = [BinaryTree, Sidewinder, BreadthFirstSearch] // [PrimsAlgorithm, KruskalsAlgorithm]
+let algorithms = [DepthFirstSearch, BraidMaze] // [PrimsAlgorithm, KruskalsAlgorithm]
 let index: number = 0
 
 let maze: Maze
@@ -45,8 +47,10 @@ function loop()
         process.update()
         if (process.finished)
         {
+            if (index === algorithms.length - 1) break
+
             maze.validateUndirected()
-            maze.reset()
+            // maze.reset()
 
             if (++index >= algorithms.length) index = 0
             process = new algorithms[index](maze)

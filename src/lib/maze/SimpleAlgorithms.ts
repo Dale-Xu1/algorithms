@@ -181,7 +181,7 @@ export class HuntAndKill extends MazeProcess
 export class Sidewinder extends MazeProcess
 {
 
-    public constructor(maze: Maze) { super(maze) }
+    public constructor(maze: Maze, private readonly bias: number = 0.5) { super(maze) }
 
     private *generate()
     {
@@ -193,7 +193,7 @@ export class Sidewinder extends MazeProcess
             let start = 0
             for (let i = 0; i < maze.width; i++)
             {
-                if (Math.random() < 0.5 || i >= maze.width - 1)
+                if (Math.random() < this.bias || i >= maze.width - 1)
                 {
                     let cell = start + Math.floor(Math.random() * (i - start + 1))
                     start = i + 1
@@ -219,18 +219,18 @@ export class Sidewinder extends MazeProcess
 export class BinaryTree extends MazeProcess
 {
 
-    public constructor(maze: Maze) { super(maze) }
+    public constructor(maze: Maze, private readonly bias: number = 0.5) { super(maze) }
 
     private *generate()
     {
         let maze = this.maze
         for (let j = 0; j < maze.height; j++) for (let i = 0; i < maze.width; i++)
         {
-            if (i >= maze.width - 1 && j >= maze.height - 1) return
+            if (i === 0 && j === 0) continue
 
-            if (i >= maze.width - 1) maze.enable([i, j], [i, j + 1])
-            else if (j >= maze.height - 1) maze.enable([i, j], [i + 1, j])
-            else maze.enable([i, j], Math.random() < 0.5 ? [i + 1, j] : [i, j + 1])
+            if (i === 0) maze.enable([i, j], [i, j - 1])
+            else if (j === 0) maze.enable([i, j], [i - 1, j])
+            else maze.enable([i, j], Math.random() < this.bias ? [i, j - 1] : [i - 1, j])
 
             yield
         }
@@ -243,25 +243,5 @@ export class BinaryTree extends MazeProcess
     {
         if (this.generator.next().done) this.finished = true
     }
-
-    // private i: number = 0
-    // private j: number = 0
-
-    // public update()
-    // {
-    //     let maze = this.maze
-    //     if (this.i >= maze.width - 1 && this.j >= maze.height - 1) return void (this.finished = true)
-
-    //     if (this.i >= maze.width - 1) maze.enable([this.i, this.j], [this.i, this.j + 1])
-    //     else if (this.j >= maze.height - 1) maze.enable([this.i, this.j], [this.i + 1, this.j])
-    //     else maze.enable([this.i, this.j], Math.random() < 0.5 ? [this.i + 1, this.j] : [this.i, this.j + 1])
-
-    //     this.i++
-    //     if (this.i >= maze.width)
-    //     {
-    //         this.i = 0
-    //         this.j++
-    //     }
-    // }
 
 }
