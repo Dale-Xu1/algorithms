@@ -3,10 +3,10 @@ import { onMount } from "svelte"
 
 import Maze, { MazeProcess } from "../../lib/maze/Maze"
 
-import { DepthFirstSearch, HuntAndKill } from "../../lib/maze/SimpleAlgorithms"
+import { BinaryTree, DepthFirstSearch, HuntAndKill, Sidewinder } from "../../lib/maze/SimpleAlgorithms"
 import KruskalsAlgorithm from "../../lib/maze/KruskalsAlgorithm"
 import PrimsAlgorithm from "../../lib/maze/PrimsAlgorithm"
-// TODO: Row-based: Eller, Sidewinder, Binary
+// TODO: Row-based: Eller
 // TODO: Random walks: Aldous-Broder, Wilson (extension necessary)
 // TODO: Division?
 
@@ -15,7 +15,7 @@ const SIZE: number = 10
 let canvas: HTMLCanvasElement
 let c: CanvasRenderingContext2D
 
-let algorithms = [HuntAndKill] // [KruskalsAlgorithm, PrimsAlgorithm, DepthFirstSearch]
+let algorithms = [Sidewinder] // [KruskalsAlgorithm, PrimsAlgorithm, DepthFirstSearch]
 let index: number = 0
 
 let maze: Maze
@@ -40,12 +40,12 @@ function loop()
 {
     requestAnimationFrame(loop)
 
-    for (let i = 0; i < 20; i++)
+    for (let i = 0; i < 10; i++)
     {
         process.update()
         if (process.finished)
         {
-            // maze.validateUndirected()
+            maze.validateUndirected()
             // maze.reset()
 
             // if (++index >= algorithms.length) index = 0

@@ -12,7 +12,7 @@ export default class KruskalsAlgorithm extends MazeProcess
 
     private readonly queue: ActiveEdge[] = []
 
-    public init()
+    public override init()
     {
         let maze = this.maze
         for (let i = 0; i < maze.width; i++)
@@ -33,7 +33,7 @@ export default class KruskalsAlgorithm extends MazeProcess
         this.queue.sort((a, b) => a.weight - b.weight)
     }
 
-    public update()
+    public override update()
     {
         if (this.queue.length === 0) return void (this.finished = true)
         let edge = this.queue.shift()!

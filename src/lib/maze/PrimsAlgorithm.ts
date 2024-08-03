@@ -61,7 +61,7 @@ class ActiveNode { public constructor(public readonly index: [number, number], p
 class NodeMinQueue extends PriorityQueue<ActiveNode>
 {
 
-    protected comparator(a: ActiveNode, b: ActiveNode): boolean { return a.key < b.key }
+    protected override comparator(a: ActiveNode, b: ActiveNode): boolean { return a.key < b.key }
 
 }
 
@@ -73,7 +73,7 @@ export default class PrimsAlgorithm extends MazeProcess
     private readonly mst: boolean[][] = []
     private readonly queue: NodeMinQueue = new NodeMinQueue()
 
-    public init()
+    public override init()
     {
         let maze = this.maze
         for (let i = 0; i < maze.width; i++)
@@ -88,7 +88,7 @@ export default class PrimsAlgorithm extends MazeProcess
         this.updateActive(i, j)
     }
 
-    public update()
+    public override update()
     {
         let min = this.queue.pop()
         if (min === null) return void (this.finished = true)
