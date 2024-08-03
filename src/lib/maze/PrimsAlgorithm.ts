@@ -1,4 +1,4 @@
-import Maze, { MazeProcess } from "./Maze"
+import Maze, { ActiveEdge, MazeProcess } from "./Maze"
 
 abstract class PriorityQueue<T>
 {
@@ -57,11 +57,10 @@ abstract class PriorityQueue<T>
 
 }
 
-class ActiveNode { public constructor(public readonly index: [number, number], public from: [number, number], public key: number) { } }
-class NodeMinQueue extends PriorityQueue<ActiveNode>
+class NodeMinQueue extends PriorityQueue<ActiveEdge>
 {
 
-    protected override comparator(a: ActiveNode, b: ActiveNode): boolean { return a.key < b.key }
+    protected override comparator(a: ActiveEdge, b: ActiveEdge): boolean { return a.weight < b.weight }
 
 }
 
@@ -93,12 +92,12 @@ export default class PrimsAlgorithm extends MazeProcess
         let min = this.queue.pop()
         if (min === null) return void (this.finished = true)
 
-        let [i, j] = min.index
+        let [i, j] = min.to
         if (this.mst[i][j]) return void this.update()
 
         this.mst[i][j] = true
         this.updateActive(i, j)
-        this.maze.enable(min.index, min.from)
+        this.maze.enable(min.to, min.from)
     }
 
     private updateActive(i: number, j: number)
@@ -108,7 +107,7 @@ export default class PrimsAlgorithm extends MazeProcess
             let [k, l] = edge.node
             if (this.mst[k][l]) continue
 
-            this.queue.push(new ActiveNode(edge.node, [i, j], edge.weight))
+            this.queue.push(new ActiveEdge(edge.node, [i, j], edge.weight))
         }
     }
 

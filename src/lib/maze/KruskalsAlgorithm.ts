@@ -1,6 +1,4 @@
-import Maze, { MazeProcess } from "./Maze"
-
-class ActiveEdge { public constructor(public readonly to: [number, number], public readonly from: [number, number], public readonly weight: number) { } }
+import Maze, { ActiveEdge, MazeProcess } from "./Maze"
 
 export default class KruskalsAlgorithm extends MazeProcess
 {

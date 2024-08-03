@@ -17,6 +17,7 @@ export class Node
 
 }
 
+export class ActiveEdge { public constructor(public readonly to: [number, number], public readonly from: [number, number], public readonly weight: number) { } }
 export class Edge
 {
 
