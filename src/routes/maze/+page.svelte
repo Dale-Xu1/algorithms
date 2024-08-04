@@ -12,16 +12,16 @@ import BraidMaze from "../../lib/maze/BraidMaze"
 // TODO: Aldous-Broder, Wilson (extension necessary)
 // TODO: Recursive division (new rendering system necessary)
 
-const SIZE: number = 10
+const SIZE: number = 20
 
 let canvas: HTMLCanvasElement
 let c: CanvasRenderingContext2D
 
-let algorithms = [DepthFirstSearch, BraidMaze] // [PrimsAlgorithm, KruskalsAlgorithm]
-let index: number = 0
-
 let maze: Maze
-let process: MazeProcess
+let queue: MazeProcess[] = []
+let current: MazeProcess | null = null
+
+let iterations: number = 5
 
 onMount(() =>
 {
@@ -32,8 +32,7 @@ onMount(() =>
     let width = Math.floor(canvas.width / ratio / SIZE), height = Math.floor(canvas.height / ratio / SIZE)
 
     maze = new Maze(width, height, 3)
-    process = new algorithms[index](maze)
-    process.init()
+    queue = [new KruskalsAlgorithm(maze), new BraidMaze(maze)]
 
     requestAnimationFrame(loop)
 })
@@ -41,21 +40,20 @@ onMount(() =>
 function loop()
 {
     requestAnimationFrame(loop)
-
-    for (let i = 0; i < 20; i++)
+    
+    if (current === null && queue.length > 0)
     {
-        process.update()
-        if (process.finished)
+        current = queue.shift()!
+        current.init()
+    }
+
+    if (current !== null) for (let i = 0; i < iterations; i++)
+    {
+        current.update()
+        if (current.finished)
         {
-            if (index === algorithms.length - 1) break
-
             maze.validateUndirected()
-            // maze.reset()
-
-            if (++index >= algorithms.length) index = 0
-            process = new algorithms[index](maze)
-            process.init()
-
+            current = null
             break
         }
     }
@@ -103,7 +101,7 @@ function resize()
 canvas {
     width: 100%;
     flex-grow: 1;
-    background-color: #000000;
+    background-color: #ffffff;
 }
 
 </style>

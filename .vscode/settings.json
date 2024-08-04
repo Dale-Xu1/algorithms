@@ -5,6 +5,7 @@
         "deadends",
         "Ellers",
         "heapify",
-        "Kruskals"
+        "Kruskals",
+        "unmark"
     ]
 }

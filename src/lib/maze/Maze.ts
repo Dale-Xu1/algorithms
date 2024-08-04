@@ -2,6 +2,7 @@ export class Node
 {
 
     public readonly edges: Edge[] = []
+    public enabled: boolean = false
 
     public addEdge(edge: Edge) { this.edges.push(edge) }
     public getEdge([i, j]: [number, number]): Edge | null
@@ -22,23 +23,23 @@ export class Edge
 {
 
     public enabled: boolean = false
-    public active: number = 0
 
     public constructor(public readonly node: [number, number], public readonly weight: number) { }
 
-    public update() { if (this.active > 0) this.active-- }
     public equal(edge: Edge | null): boolean
     {
         if (edge === null) return false
-        return this.enabled === edge.enabled && this.active === edge.active && this.weight === edge.weight
+        return this.enabled === edge.enabled && this.weight === edge.weight
     }
 
 }
 
+const enum State { WALL = -1, EMPTY = 0 }
 export default class Maze
 {
 
     public readonly nodes: Node[][] = []
+    private readonly state: State[][] = []
 
     public constructor(public readonly width: number, public readonly height: number, private readonly lifetime: number) { this.reset() }
     public reset()
@@ -47,6 +48,12 @@ export default class Maze
         {
             this.nodes[i] = []
             for (let j = 0; j < this.height; j++) this.nodes[i][j] = new Node()
+        }
+
+        for (let i = 0; i < 2 * this.width - 1; i++)
+        {
+            this.state[i] = []
+            for (let j = 0; j < 2 * this.height - 1; j++) this.state[i][j] = State.WALL
         }
 
         for (let i = 0; i < this.width; i++) for (let j = 0; j < this.height; j++)
@@ -69,51 +76,105 @@ export default class Maze
 
     public enable([i, j]: [number, number], [k, l]: [number, number])
     {
-        let a = this.nodes[i][j].getEdge([k, l]), b = this.nodes[k][l].getEdge([i, j])
-        if (a !== null) a.enabled = true, a.active = this.lifetime
-        if (b !== null) b.enabled = true, b.active = this.lifetime
+        let m = this.nodes[i][j], n = this.nodes[k][l]
+        let a = m.getEdge([k, l]), b = n.getEdge([i, j])
+
+        m.enabled = n.enabled = true
+        if (a !== null) a.enabled = true
+        if (b !== null) b.enabled = true
     }
 
     public update()
     {
-        for (let i = 0; i < this.width; i++) for (let j = 0; j < this.height; j++)
+        for (let i = 0; i < 2 * this.width - 1; i++) for (let j = 0; j < 2 * this.height - 1; j++)
         {
-            let node = this.nodes[i][j]
-            for (let edge of node.edges) edge.update()
+            if (this.state[i][j] > State.EMPTY) this.state[i][j]--
         }
     }
 
     public render(c: CanvasRenderingContext2D)
     {
-        c.strokeStyle = "#ff0000"
-        this.renderAll(c, true)
+        let width = c.canvas.width, height = c.canvas.height
+        let w = width / (2 * this.width + 1), h = height / (2 * this.height + 1)
 
-        c.strokeStyle = "#ffffff"
-        this.renderAll(c, false)
-    }
+        c.fillStyle = "#000000"
+        c.fillRect(0, 0, width, h)
+        c.fillRect(0, 0, w, height)
+        c.fillRect(0, height - h, width, h)
+        c.fillRect(width - w, 0, w, height)
 
-    private renderAll(c: CanvasRenderingContext2D, state: boolean)
-    {
+        this.updateState()
         for (let i = 0; i < this.width; i++) for (let j = 0; j < this.height; j++)
         {
+            let u = 2 * i, v = 2 * j
             let node = this.nodes[i][j]
-            let right = node.getEdge([i + 1, j]), down = node.getEdge([i, j + 1])
 
-            if (right !== null && right.enabled && right.active > 0 === state) this.line(c, i, j, i + 1, j)
-            if (down !== null && down.enabled && down.active > 0 === state) this.line(c, i, j, i, j + 1)
+            if (!node.enabled)
+            {
+                c.fillStyle = "#000000"
+                c.fillRect(u * w, v * h, w * 3 + 1, h * 3 + 1)
+                continue
+            }
+            if (this.state[u][v] > State.EMPTY) c.fillStyle = "#ff0000", c.fillRect((u + 1) * w, (v + 1) * h, w + 1, h + 1)
+
+            let right = node.getEdge([i + 1, j]), down = node.getEdge([i, j + 1])
+            if (right !== null && this.nodes[i + 1][j].enabled && this.state[u + 1][v] !== State.EMPTY)
+            {
+                c.fillStyle = this.state[u + 1][v] > State.EMPTY ? "#ff0000" : "#000000"
+                c.fillRect((u + 2) * w, (v + 1) * h, w + 1, h + 1)
+            }
+            if (down !== null && this.nodes[i][j + 1].enabled && this.state[u][v + 1] !== State.EMPTY)
+            {
+                c.fillStyle = this.state[u][v + 1] > State.EMPTY ? "#ff0000" : "#000000"
+                c.fillRect((u + 1) * w, (v + 2) * h, w + 1, h + 1)
+            }
+
+            if (right !== null && down !== null && this.state[u + 1][v + 1] !== 0)
+            {
+                c.fillStyle = this.state[u + 1][v + 1] > State.EMPTY ? "#ff0000" : "#000000"
+                c.fillRect((u + 2) * w, (v + 2) * h, w + 1, h + 1)
+            }
         }
     }
 
-    private line(c: CanvasRenderingContext2D, i: number, j: number, k: number, l: number)
+    private unmark([i, j]: [number, number]) { this.state[i][j] = State.WALL }
+    private mark([i, j]: [number, number])
     {
-        let w = c.canvas.width / this.width, h =  c.canvas.height / this.height
-        c.lineWidth = w / 2
-        c.lineCap = "square"
+        if (this.state[i][j] === State.WALL) this.state[i][j] = this.lifetime
+    }
 
-        c.beginPath()
-        c.moveTo(i * w + w / 2, j * h + h / 2)
-        c.lineTo(k * w + w / 2, l * h + h / 2)
-        c.stroke()
+    private updateState()
+    {
+        for (let i = 0; i < this.width; i++) for (let j = 0; j < this.height; j++)
+        {
+            let u = 2 * i, v = 2 * j
+            let n1 = this.nodes[i][j]
+
+            if (n1.enabled) this.mark([u, v])
+            else this.unmark([u, v])
+
+            let e1 = n1.getEdge([i + 1, j]), e2 = n1.getEdge([i, j + 1])
+            if (e1 !== null)
+            {
+                if (e1.enabled) this.mark([u + 1, v])
+                else this.unmark([u + 1, v])
+            }
+            if (e2 !== null)
+            {
+                if (e2.enabled) this.mark([u, v + 1])
+                else this.unmark([u, v + 1])
+            }
+
+            if (e1 !== null && e2 !== null)
+            {
+                let n2 = this.nodes[i + 1][j], n3 = this.nodes[i][j + 1], n4 = this.nodes[i + 1][j + 1]
+                let e3 = n2.getEdge([i + 1, j + 1])!, e4 = n3.getEdge([i + 1, j + 1])!
+
+                if (n1.enabled && n2.enabled && n3.enabled && n4.enabled &&
+                    e1.enabled && e2.enabled && e3.enabled && e4.enabled) this.mark([u + 1, v + 1])
+                else this.unmark([u + 1, v + 1])
+            }
+        }
     }
 
     public validateUndirected()
