@@ -3,12 +3,13 @@ import { onMount } from "svelte"
 
 import Maze, { MazeProcess } from "../../lib/maze/Maze"
 
-import { BinaryTree, BreadthFirstSearch, DepthFirstSearch, HuntAndKill, Sidewinder } from "../../lib/maze/SimpleAlgorithms"
+import { AldousBroderAlgorithm, BinaryTreeAlgorithm, BreadthFirstSearch, DepthFirstSearch, HuntAndKillAlgorithm, SidewinderAlgorithm } from "../../lib/maze/SimpleAlgorithms"
 import KruskalsAlgorithm from "../../lib/maze/KruskalsAlgorithm"
 import PrimsAlgorithm from "../../lib/maze/PrimsAlgorithm"
+import EllersAlgorithm from "$lib/maze/EllersAlgorithm"
 import BraidMaze from "../../lib/maze/BraidMaze"
 
-// TODO: Aldous-Broder, Wilson (render extension necessary)
+// TODO: Wilson
 // TODO: Recursive division (different reset routine)
 
 const SIZE: number = 20
@@ -31,7 +32,7 @@ onMount(() =>
     let width = Math.floor(canvas.width / ratio / SIZE), height = Math.floor(canvas.height / ratio / SIZE)
 
     maze = new Maze(width, height, 3)
-    queue = [new PrimsAlgorithm(maze), new BraidMaze(maze)]
+    queue = [new AldousBroderAlgorithm(maze)] // , new BraidMaze(maze, 0.2)]
 
     requestAnimationFrame(loop)
 })
@@ -49,6 +50,7 @@ function loop()
         current.update()
         if (current.finished)
         {
+            console.log("done")
             maze.validate()
             current = null
             break
@@ -59,6 +61,7 @@ function loop()
     maze.render(c)
     maze.update()
 
+    if (current !== null) current.render(c)
     requestAnimationFrame(loop)
 }
 
