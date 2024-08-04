@@ -8,9 +8,8 @@ import KruskalsAlgorithm from "../../lib/maze/KruskalsAlgorithm"
 import PrimsAlgorithm from "../../lib/maze/PrimsAlgorithm"
 import BraidMaze from "../../lib/maze/BraidMaze"
 
-// TODO: Eller
-// TODO: Aldous-Broder, Wilson (extension necessary)
-// TODO: Recursive division (new rendering system necessary)
+// TODO: Aldous-Broder, Wilson (render extension necessary)
+// TODO: Recursive division (different reset routine)
 
 const SIZE: number = 20
 
@@ -32,15 +31,13 @@ onMount(() =>
     let width = Math.floor(canvas.width / ratio / SIZE), height = Math.floor(canvas.height / ratio / SIZE)
 
     maze = new Maze(width, height, 3)
-    queue = [new KruskalsAlgorithm(maze), new BraidMaze(maze)]
+    queue = [new PrimsAlgorithm(maze), new BraidMaze(maze)]
 
     requestAnimationFrame(loop)
 })
 
 function loop()
 {
-    requestAnimationFrame(loop)
-    
     if (current === null && queue.length > 0)
     {
         current = queue.shift()!
@@ -52,7 +49,7 @@ function loop()
         current.update()
         if (current.finished)
         {
-            maze.validateUndirected()
+            maze.validate()
             current = null
             break
         }
@@ -61,6 +58,8 @@ function loop()
     c.clearRect(0, 0, canvas.width, canvas.height)
     maze.render(c)
     maze.update()
+
+    requestAnimationFrame(loop)
 }
 
 function resize()

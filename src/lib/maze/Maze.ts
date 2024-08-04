@@ -35,6 +35,9 @@ export class Edge
 }
 
 const enum State { WALL = -1, EMPTY = 0 }
+const WALL  : string = "#000000"
+const ACTIVE: string = "#ff0000"
+
 export default class Maze
 {
 
@@ -97,7 +100,7 @@ export default class Maze
         let width = c.canvas.width, height = c.canvas.height
         let w = width / (2 * this.width + 1), h = height / (2 * this.height + 1)
 
-        c.fillStyle = "#000000"
+        c.fillStyle = WALL
         c.fillRect(0, 0, width, h)
         c.fillRect(0, 0, w, height)
         c.fillRect(0, height - h, width, h)
@@ -111,37 +114,36 @@ export default class Maze
 
             if (!node.enabled)
             {
-                c.fillStyle = "#000000"
-                c.fillRect(u * w, v * h, w * 3 + 1, h * 3 + 1)
+                c.fillStyle = WALL, c.fillRect(u * w, v * h, w * 3 + 1, h * 3 + 1)
                 continue
             }
-            if (this.state[u][v] > State.EMPTY) c.fillStyle = "#ff0000", c.fillRect((u + 1) * w, (v + 1) * h, w + 1, h + 1)
+            if (this.state[u][v] > State.EMPTY) c.fillStyle = ACTIVE, c.fillRect((u + 1) * w, (v + 1) * h, w + 1, h + 1)
 
             let right = node.getEdge([i + 1, j]), down = node.getEdge([i, j + 1])
             if (right !== null && this.nodes[i + 1][j].enabled && this.state[u + 1][v] !== State.EMPTY)
             {
-                c.fillStyle = this.state[u + 1][v] > State.EMPTY ? "#ff0000" : "#000000"
+                c.fillStyle = this.state[u + 1][v] > State.EMPTY ? ACTIVE : WALL
                 c.fillRect((u + 2) * w, (v + 1) * h, w + 1, h + 1)
             }
             if (down !== null && this.nodes[i][j + 1].enabled && this.state[u][v + 1] !== State.EMPTY)
             {
-                c.fillStyle = this.state[u][v + 1] > State.EMPTY ? "#ff0000" : "#000000"
+                c.fillStyle = this.state[u][v + 1] > State.EMPTY ? ACTIVE : WALL
                 c.fillRect((u + 1) * w, (v + 2) * h, w + 1, h + 1)
             }
 
             if (right !== null && down !== null && this.state[u + 1][v + 1] !== 0)
             {
-                c.fillStyle = this.state[u + 1][v + 1] > State.EMPTY ? "#ff0000" : "#000000"
+                let n1 = this.nodes[i + 1][j], n2 = this.nodes[i][j + 1], n3 = this.nodes[i + 1][j + 1]
+                if (!n1.enabled || !n2.enabled || !n3.enabled) continue
+
+                c.fillStyle = this.state[u + 1][v + 1] > State.EMPTY ? ACTIVE : WALL
                 c.fillRect((u + 2) * w, (v + 2) * h, w + 1, h + 1)
             }
         }
     }
 
     private unmark([i, j]: [number, number]) { this.state[i][j] = State.WALL }
-    private mark([i, j]: [number, number])
-    {
-        if (this.state[i][j] === State.WALL) this.state[i][j] = this.lifetime
-    }
+    private mark([i, j]: [number, number]) { if (this.state[i][j] === State.WALL) this.state[i][j] = this.lifetime }
 
     private updateState()
     {
@@ -167,17 +169,16 @@ export default class Maze
 
             if (e1 !== null && e2 !== null)
             {
-                let n2 = this.nodes[i + 1][j], n3 = this.nodes[i][j + 1], n4 = this.nodes[i + 1][j + 1]
+                let n2 = this.nodes[i + 1][j], n3 = this.nodes[i][j + 1]
                 let e3 = n2.getEdge([i + 1, j + 1])!, e4 = n3.getEdge([i + 1, j + 1])!
 
-                if (n1.enabled && n2.enabled && n3.enabled && n4.enabled &&
-                    e1.enabled && e2.enabled && e3.enabled && e4.enabled) this.mark([u + 1, v + 1])
+                if (e1.enabled && e2.enabled && e3.enabled && e4.enabled) this.mark([u + 1, v + 1])
                 else this.unmark([u + 1, v + 1])
             }
         }
     }
 
-    public validateUndirected()
+    public validate()
     {
         for (let i = 0; i < this.width; i++) for (let j = 0; j < this.height; j++)
         {
@@ -189,6 +190,7 @@ export default class Maze
             if (down !== null) result &&= down.equal(this.nodes[i][j + 1].getEdge([i, j]))
 
             if (!result) throw new Error("Graph is not undirected")
+            if (!node.enabled) for (let edge of node.edges) if (edge.enabled) throw new Error("Invalid disabled node")
         }
     }
 
