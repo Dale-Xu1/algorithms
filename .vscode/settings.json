@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
+        "AldousBroder",
         "Bitonic",
         "deadend",
         "deadends",
@@ -7,6 +8,6 @@
         "heapify",
         "Kruskals",
         "unmark",
-        "AldousBroder"
+        "Wilsons"
     ]
 }

@@ -3,10 +3,12 @@ import { onMount } from "svelte"
 
 import Maze, { MazeProcess } from "../../lib/maze/Maze"
 
-import { AldousBroderAlgorithm, BinaryTreeAlgorithm, BreadthFirstSearch, DepthFirstSearch, HuntAndKillAlgorithm, SidewinderAlgorithm } from "../../lib/maze/SimpleAlgorithms"
-import KruskalsAlgorithm from "../../lib/maze/KruskalsAlgorithm"
-import PrimsAlgorithm from "../../lib/maze/PrimsAlgorithm"
-import EllersAlgorithm from "$lib/maze/EllersAlgorithm"
+import { SidewinderAlgorithm, BinaryTreeAlgorithm } from "../../lib/maze/SimpleAlgorithms"
+import { DepthFirstSearch, BreadthFirstSearch, HuntAndKill } from "../../lib/maze/TreeTraversal"
+import { PrimsAlgorithm, KruskalsAlgorithm } from "../../lib/maze/MinimumSpanningTree"
+import { AldousBroderAlgorithm } from "../../lib/maze/UniformSpanningTree"
+import EllersAlgorithm from "../../lib/maze/EllersAlgorithm"
+
 import BraidMaze from "../../lib/maze/BraidMaze"
 
 // TODO: Wilson
