@@ -6,12 +6,11 @@ import Maze, { MazeProcess } from "../../lib/maze/Maze"
 import { SidewinderAlgorithm, BinaryTreeAlgorithm } from "../../lib/maze/SimpleAlgorithms"
 import { DepthFirstSearch, BreadthFirstSearch, HuntAndKill } from "../../lib/maze/TreeTraversal"
 import { PrimsAlgorithm, KruskalsAlgorithm } from "../../lib/maze/MinimumSpanningTree"
-import { AldousBroderAlgorithm } from "../../lib/maze/UniformSpanningTree"
+import { AldousBroderAlgorithm, WilsonsAlgorithm } from "../../lib/maze/UniformSpanningTree"
 import EllersAlgorithm from "../../lib/maze/EllersAlgorithm"
 
 import BraidMaze from "../../lib/maze/BraidMaze"
 
-// TODO: Wilson
 // TODO: Recursive division (different reset routine)
 
 const SIZE: number = 20
@@ -23,7 +22,7 @@ let maze: Maze
 let queue: MazeProcess[] = []
 let current: MazeProcess | null = null
 
-let iterations: number = 5
+let iterations: number = 20
 
 onMount(() =>
 {
@@ -34,7 +33,7 @@ onMount(() =>
     let width = Math.floor(canvas.width / ratio / SIZE), height = Math.floor(canvas.height / ratio / SIZE)
 
     maze = new Maze(width, height, 3)
-    queue = [new AldousBroderAlgorithm(maze)] // , new BraidMaze(maze, 0.2)]
+    queue = [new WilsonsAlgorithm(maze)] // , new BraidMaze(maze)]
 
     requestAnimationFrame(loop)
 })
@@ -52,7 +51,6 @@ function loop()
         current.update()
         if (current.finished)
         {
-            console.log("done")
             maze.validate()
             current = null
             break

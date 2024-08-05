@@ -31,16 +31,16 @@ export class DepthFirstSearch extends MazeProcess
         let maze = this.maze
         let [i, j] = this.position
 
-        let min: Edge | null = null
+        let edges: Edge[] = []
         for (let edge of maze.nodes[i][j].edges)
         {
             let [k, l] = edge.node
             if (this.visited[k][l]) continue
 
-            if (min === null || edge.weight < min.weight) min = edge
+            edges.push(edge)
         }
 
-        if (min === null)
+        if (edges.length === 0)
         {
             this.stack.pop()
             if (this.stack.length === 0) return void (this.finished = true)
@@ -49,10 +49,11 @@ export class DepthFirstSearch extends MazeProcess
             return void this.update()
         }
 
-        let [k, l] = this.position = min.node
+        let edge = edges[Math.floor(Math.random() * edges.length)]
+        let [k, l] = this.position = edge.node
+
         this.visited[k][l] = true
         this.stack.push(this.position)
-
         maze.enable([i, j], [k, l])
     }
 
@@ -137,16 +138,16 @@ export class HuntAndKill extends MazeProcess
         let maze = this.maze
         let [i, j] = this.position
 
-        let min: Edge | null = null
+        let edges: Edge[] = []
         for (let edge of maze.nodes[i][j].edges)
         {
             let [k, l] = edge.node
             if (this.visited[k][l]) continue
 
-            if (min === null || edge.weight < min.weight) min = edge
+            edges.push(edge)
         }
 
-        if (min === null)
+        if (edges.length === 0)
         {
             let node = this.find(this.last)
             if (node === null) return void (this.finished = true)
@@ -155,7 +156,9 @@ export class HuntAndKill extends MazeProcess
             return void this.update()
         }
 
-        let [k, l] = this.position = min.node
+        let edge = edges[Math.floor(Math.random() * edges.length)]
+        let [k, l] = this.position = edge.node
+
         this.visited[k][l] = true
         maze.enable([i, j], [k, l])
     }
