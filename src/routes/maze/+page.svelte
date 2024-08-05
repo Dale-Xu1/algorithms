@@ -8,10 +8,9 @@ import { DepthFirstSearch, BreadthFirstSearch, HuntAndKill } from "../../lib/maz
 import { PrimsAlgorithm, KruskalsAlgorithm } from "../../lib/maze/MinimumSpanningTree"
 import { AldousBroderAlgorithm, WilsonsAlgorithm } from "../../lib/maze/UniformSpanningTree"
 import EllersAlgorithm from "../../lib/maze/EllersAlgorithm"
+import { RecursiveDivision } from "$lib/maze/RecursiveDivision"
 
 import BraidMaze from "../../lib/maze/BraidMaze"
-
-// TODO: Recursive division (different reset routine)
 
 const SIZE: number = 20
 
@@ -22,7 +21,7 @@ let maze: Maze
 let queue: MazeProcess[] = []
 let current: MazeProcess | null = null
 
-let iterations: number = 20
+let iterations: number = 5
 
 onMount(() =>
 {
@@ -33,8 +32,6 @@ onMount(() =>
     let width = Math.floor(canvas.width / ratio / SIZE), height = Math.floor(canvas.height / ratio / SIZE)
 
     maze = new Maze(width, height, 3)
-    queue = [new WilsonsAlgorithm(maze)] // , new BraidMaze(maze)]
-
     requestAnimationFrame(loop)
 })
 
@@ -80,7 +77,22 @@ function resize()
 <svelte:window on:resize={resize} />
 <div class="main">
     <canvas bind:this={canvas}></canvas>
-    <!-- <div class="controls"></div> -->
+    <div class="controls">
+        <span>Iterations/frame:</span>
+        <input type="number" bind:value={iterations}>
+        <button on:click={() => queue.push(new PrimsAlgorithm(maze))}>Prim</button>
+        <button on:click={() => queue.push(new KruskalsAlgorithm(maze))}>Kruskal</button>
+        <button on:click={() => queue.push(new DepthFirstSearch(maze))}>DFS</button>
+        <button on:click={() => queue.push(new BreadthFirstSearch(maze))}>BFS</button>
+        <button on:click={() => queue.push(new HuntAndKill(maze))}>Hunt and Kill</button>
+        <button on:click={() => queue.push(new EllersAlgorithm(maze))}>Eller</button>
+        <button on:click={() => queue.push(new RecursiveDivision(maze))}>Recursive Division</button>
+        <button on:click={() => queue.push(new AldousBroderAlgorithm(maze))}>Aldous-Broder</button>
+        <button on:click={() => queue.push(new WilsonsAlgorithm(maze))}>Wilson</button>
+        <button on:click={() => queue.push(new BinaryTreeAlgorithm(maze))}>Binary Tree</button>
+        <button on:click={() => queue.push(new SidewinderAlgorithm(maze))}>Sidewinder</button>
+        <button on:click={() => queue.push(new BraidMaze(maze))}>Braid</button>
+    </div>
 </div>
 <style>
 :global(*) {
@@ -104,6 +116,35 @@ canvas {
     width: 100%;
     flex-grow: 1;
     background-color: #ffffff;
+}
+
+.controls {
+    padding: 4px 12px;
+    border-top: 1px solid #a0a0a0
+}
+
+span {
+    font-size: 14px;
+}
+
+input, button {
+    margin: 4px;
+    padding: 2px;
+    border: 1px solid #a0a0a0;
+    border-radius: 0;
+}
+
+input {
+    width: 80px;
+    margin-right: 12px;
+}
+
+button {
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #dddddd;
 }
 
 </style>

@@ -13,6 +13,8 @@ export class DepthFirstSearch extends MazeProcess
     public override init()
     {
         let maze = this.maze
+        maze.reset()
+
         for (let i = 0; i < maze.width; i++)
         {
             this.visited[i] = []
@@ -70,6 +72,8 @@ export class BreadthFirstSearch extends MazeProcess
     public override init()
     {
         let maze = this.maze
+        maze.reset()
+
         for (let i = 0; i < maze.width; i++)
         {
             this.visited[i] = []
@@ -124,6 +128,8 @@ export class HuntAndKill extends MazeProcess
     public override init()
     {
         let maze = this.maze
+        maze.reset()
+
         for (let i = 0; i < maze.width; i++)
         {
             this.visited[i] = []

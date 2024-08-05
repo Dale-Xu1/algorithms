@@ -75,6 +75,8 @@ export class PrimsAlgorithm extends MazeProcess
     public override init()
     {
         let maze = this.maze
+        maze.reset()
+
         for (let i = 0; i < maze.width; i++)
         {
             this.mst[i] = []
@@ -82,7 +84,6 @@ export class PrimsAlgorithm extends MazeProcess
         }
 
         let i = Math.floor(Math.random() * maze.width), j = Math.floor(Math.random() * maze.height)
-
         this.mst[i][j] = true
         this.updateActive(i, j)
     }
@@ -126,6 +127,8 @@ export class KruskalsAlgorithm extends MazeProcess
     public override init()
     {
         let maze = this.maze
+        maze.reset()
+
         for (let i = 0; i < maze.width; i++)
         {
             this.parent[i] = [], this.rank[i] = []

@@ -76,6 +76,21 @@ export default class Maze
         }
     }
 
+    public empty()
+    {
+        for (let i = 0; i < this.width; i++) for (let j = 0; j < this.height; j++)
+        {
+            this.nodes[i][j].enabled = true
+            if (i < this.width - 1) this.enable([i, j], [i + 1, j])
+            if (j < this.height - 1) this.enable([i, j], [i, j + 1])
+        }
+
+        for (let i = 0; i < 2 * this.width - 1; i++)
+        {
+            this.state[i] = []
+            for (let j = 0; j < 2 * this.height - 1; j++) this.state[i][j] = State.EMPTY
+        }
+    }
 
     public enable([i, j]: [number, number], [k, l]: [number, number])
     {
@@ -85,6 +100,15 @@ export default class Maze
         m.enabled = n.enabled = true
         if (a !== null) a.enabled = true
         if (b !== null) b.enabled = true
+    }
+
+    public disable([i, j]: [number, number], [k, l]: [number, number])
+    {
+        let m = this.nodes[i][j], n = this.nodes[k][l]
+        let a = m.getEdge([k, l]), b = n.getEdge([i, j])
+
+        if (a !== null) a.enabled = false
+        if (b !== null) b.enabled = false
     }
 
     public update()

@@ -29,7 +29,11 @@ export class SidewinderAlgorithm extends MazeProcess
     }
 
     private generator!: Generator<void, void, void>
-    public override init() { this.generator = this.generate() }
+    public override init()
+    {
+        this.maze.reset()
+        this.generator = this.generate()
+    }
 
     public override update()
     {
@@ -59,7 +63,11 @@ export class BinaryTreeAlgorithm extends MazeProcess
     }
 
     private generator!: Generator<void, void, void>
-    public override init() { this.generator = this.generate() }
+    public override init()
+    {
+        this.maze.reset()
+        this.generator = this.generate()
+    }
 
     public override update()
     {

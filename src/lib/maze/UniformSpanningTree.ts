@@ -13,6 +13,8 @@ export class AldousBroderAlgorithm extends MazeProcess
     public override init()
     {
         let maze = this.maze
+        maze.reset()
+
         for (let i = 0; i < maze.width; i++)
         {
             this.visited[i] = []
@@ -72,6 +74,8 @@ export class WilsonsAlgorithm extends MazeProcess
     public override init()
     {
         let maze = this.maze
+        maze.reset()
+
         for (let i = 0; i < maze.width; i++)
         {
             this.state[i] = []
@@ -79,9 +83,9 @@ export class WilsonsAlgorithm extends MazeProcess
         }
 
         let [i, j] = this.choose()!
+
         this.state[i][j] = State.MAZE
         maze.nodes[i][j].enabled = true
-
         this.reset()
     }
 
