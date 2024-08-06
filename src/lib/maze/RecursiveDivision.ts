@@ -16,12 +16,11 @@ export class RecursiveDivision extends MazeProcess
         else if (w > h) direction = Direction.VERTICAL
         else direction = Math.random() < 0.5 ? Direction.HORIZONTAL : Direction.VERTICAL
 
-        yield
         if (direction === Direction.HORIZONTAL)
         {
             let j = y + Math.floor(Math.random() * (h - 1))
             let empty = Math.floor(Math.random() * w)
-            for (let i = 0; i < w; i++) if (i !== empty) maze.disable([x + i, j], [x + i, j + 1])
+            for (let i = 0; i < w; i++) if (i !== empty) maze.disable([x + i, j], [x + i, j + 1]), yield
 
             let z = j - y + 1
             yield *this.generate(x, y, w, z)
@@ -31,7 +30,7 @@ export class RecursiveDivision extends MazeProcess
         {
             let i = x + Math.floor(Math.random() * (w - 1))
             let empty = Math.floor(Math.random() * h)
-            for (let j = 0; j < h; j++) if (j !== empty) maze.disable([i, y + j], [i + 1, y + j])
+            for (let j = 0; j < h; j++) if (j !== empty) maze.disable([i, y + j], [i + 1, y + j]), yield
 
             let z = i - x + 1
             yield *this.generate(x, y, z, h)

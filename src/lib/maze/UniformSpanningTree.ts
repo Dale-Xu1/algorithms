@@ -49,6 +49,7 @@ export class AldousBroderAlgorithm extends MazeProcess
 
     public override render(c: CanvasRenderingContext2D)
     {
+        if (this.finished) return
         let maze = this.maze
 
         let w = c.canvas.width / (2 * maze.width + 1), h = c.canvas.height / (2 * maze.height + 1)
@@ -122,7 +123,7 @@ export class WilsonsAlgorithm extends MazeProcess
     private reset()
     {
         let position = this.choose()
-        if (position === null) return void (this.finished = true)
+        if (position === null) return void (this.finished = true, this.walk = [])
 
         let [i, j] = position
         if (this.state[i][j] === State.MAZE) return void this.reset()
@@ -157,7 +158,7 @@ export class WilsonsAlgorithm extends MazeProcess
             if (n === 0) console.log([i, j], stuff, this.state[i][j])
         }
     }
-    
+
     public override render(c: CanvasRenderingContext2D)
     {
         if (this.walk.length < 1) return
@@ -174,8 +175,8 @@ export class WilsonsAlgorithm extends MazeProcess
         else for (let n = 0; n < this.walk.length - 1; n++)
         {
             let [i, j] = this.walk[n], [k, l] = this.walk[n + 1]
-            if (i === k) c.fillRect((2 * i + 1) * w, (2 * Math.min(j, l) + 1) * h, w + 1, 3 * h + 1)
-            else if (j === l) c.fillRect((2 * Math.min(i, k) + 1) * w, (2 * j + 1) * h, 3 * w + 1, h + 1)
+            if (i === k) c.fillRect((2 * i + 1) * w, (2 * Math.min(j, l) + 1) * h, w, 3 * h)
+            else if (j === l) c.fillRect((2 * Math.min(i, k) + 1) * w, (2 * j + 1) * h, 3 * w, h)
         }
     }
 

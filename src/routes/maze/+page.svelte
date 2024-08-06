@@ -11,6 +11,7 @@ import EllersAlgorithm from "../../lib/maze/EllersAlgorithm"
 import { RecursiveDivision } from "$lib/maze/RecursiveDivision"
 
 import BraidMaze from "../../lib/maze/BraidMaze"
+import { DijkstrasAlgorithm, AStarAlgorithm } from "../../lib/maze/Pathfinding"
 
 const SIZE: number = 20
 
@@ -19,7 +20,7 @@ let c: CanvasRenderingContext2D
 
 let maze: Maze
 let queue: MazeProcess[] = []
-let current: MazeProcess | null = null
+let current: MazeProcess
 
 let iterations: number = 5
 
@@ -32,24 +33,28 @@ onMount(() =>
     let width = Math.floor(canvas.width / ratio / SIZE), height = Math.floor(canvas.height / ratio / SIZE)
 
     maze = new Maze(width, height, 3)
+    queue = []
+
+    current = new PrimsAlgorithm(maze)
+    current.init()
+
     requestAnimationFrame(loop)
 })
 
 function loop()
 {
-    if (current === null && queue.length > 0)
+    if (current.finished && queue.length > 0)
     {
         current = queue.shift()!
         current.init()
     }
 
-    if (current !== null) for (let i = 0; i < iterations; i++)
+    if (!current.finished) for (let i = 0; i < iterations; i++)
     {
         current.update()
         if (current.finished)
         {
             maze.validate()
-            current = null
             break
         }
     }
@@ -57,8 +62,8 @@ function loop()
     c.clearRect(0, 0, canvas.width, canvas.height)
     maze.render(c)
     maze.update()
+    current.render(c)
 
-    if (current !== null) current.render(c)
     requestAnimationFrame(loop)
 }
 
@@ -86,12 +91,14 @@ function resize()
         <button on:click={() => queue.push(new BreadthFirstSearch(maze))}>BFS</button>
         <button on:click={() => queue.push(new HuntAndKill(maze))}>Hunt and Kill</button>
         <button on:click={() => queue.push(new EllersAlgorithm(maze))}>Eller</button>
-        <button on:click={() => queue.push(new RecursiveDivision(maze))}>Recursive Division</button>
         <button on:click={() => queue.push(new AldousBroderAlgorithm(maze))}>Aldous-Broder</button>
         <button on:click={() => queue.push(new WilsonsAlgorithm(maze))}>Wilson</button>
+        <button on:click={() => queue.push(new RecursiveDivision(maze))}>Recursive Division</button>
         <button on:click={() => queue.push(new BinaryTreeAlgorithm(maze))}>Binary Tree</button>
         <button on:click={() => queue.push(new SidewinderAlgorithm(maze))}>Sidewinder</button>
         <button on:click={() => queue.push(new BraidMaze(maze))}>Braid</button>
+        <button on:click={() => queue.push(new DijkstrasAlgorithm(maze))}>Dijkstra</button>
+        <button on:click={() => queue.push(new AStarAlgorithm(maze))}>A*</button>
     </div>
 </div>
 <style>
