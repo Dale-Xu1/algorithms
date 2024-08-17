@@ -36,7 +36,7 @@ export class Edge
 
 const enum State { WALL = -1, EMPTY = 0 }
 const WALL  : string = "#000000"
-const ACTIVE: string = "#ff0000"
+const ACTIVE: string = "#ff5050"
 
 export default class Maze
 {
@@ -138,21 +138,21 @@ export default class Maze
 
             if (!node.enabled)
             {
-                c.fillStyle = WALL, c.fillRect(u * w, v * h, w * 3 + 1, h * 3 + 1)
+                c.fillStyle = WALL, c.fillRect(u * w, v * h, w * 3, h * 3)
                 continue
             }
-            if (this.state[u][v] > State.EMPTY) c.fillStyle = ACTIVE, c.fillRect((u + 1) * w, (v + 1) * h, w + 1, h + 1)
+            if (this.state[u][v] > State.EMPTY) c.fillStyle = ACTIVE, c.fillRect((u + 1) * w, (v + 1) * h, w, h)
 
             let right = node.getEdge([i + 1, j]), down = node.getEdge([i, j + 1])
             if (right !== null && this.nodes[i + 1][j].enabled && this.state[u + 1][v] !== State.EMPTY)
             {
                 c.fillStyle = this.state[u + 1][v] > State.EMPTY ? ACTIVE : WALL
-                c.fillRect((u + 2) * w, (v + 1) * h, w + 1, h + 1)
+                c.fillRect((u + 2) * w, (v + 1) * h, w, h)
             }
             if (down !== null && this.nodes[i][j + 1].enabled && this.state[u][v + 1] !== State.EMPTY)
             {
                 c.fillStyle = this.state[u][v + 1] > State.EMPTY ? ACTIVE : WALL
-                c.fillRect((u + 1) * w, (v + 2) * h, w + 1, h + 1)
+                c.fillRect((u + 1) * w, (v + 2) * h, w, h)
             }
 
             if (right !== null && down !== null && this.state[u + 1][v + 1] !== 0)
@@ -161,7 +161,7 @@ export default class Maze
                 if (!n1.enabled || !n2.enabled || !n3.enabled) continue
 
                 c.fillStyle = this.state[u + 1][v + 1] > State.EMPTY ? ACTIVE : WALL
-                c.fillRect((u + 2) * w, (v + 2) * h, w + 1, h + 1)
+                c.fillRect((u + 2) * w, (v + 2) * h, w, h)
             }
         }
     }

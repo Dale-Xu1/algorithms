@@ -32,7 +32,7 @@ export default class Graph
             c.fillStyle = `hsl(0, 100%, ${50 + (this.lifetime - this.active[i]) / this.lifetime * 50}%)`
 
             let w = width / this.length, h = this.values[i] * height
-            c.fillRect(i * w, height - h, w + 1, h)
+            c.fillRect(i * w, height - h, w, h)
         }
     }
 

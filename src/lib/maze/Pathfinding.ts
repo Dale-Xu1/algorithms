@@ -52,6 +52,10 @@ class NodeMinQueue extends PriorityQueue<[number, number]>
 
 }
 
+const SEARCH: string = "#50ff50"
+const ACTIVE: string = "#5050ff"
+const PATH  : string = "#ff5050"
+
 export class DijkstrasAlgorithm extends MazeProcess
 {
 
@@ -70,14 +74,19 @@ export class DijkstrasAlgorithm extends MazeProcess
     private graph!: Graph
 
     private queue: NodeMinQueue = new NodeMinQueue()
-    private set: [number, number][] = [[0, 0]]
+    private set: [number, number][] = []
+
+    private startIndex!: number
+    private endIndex!: number
 
     public override init()
     {
         this.graph = new Graph(this.maze)
         for (let i = 0; i < this.graph.nodes.length; i++) this.set[i] = [i, Infinity]
 
-        let index = this.graph.index(this.start)
+        let index = this.startIndex = this.graph.index(this.start)
+        this.endIndex = this.graph.index(this.end)
+
         this.queue.push(this.set[index] = [index, 0])
     }
 
@@ -88,7 +97,7 @@ export class DijkstrasAlgorithm extends MazeProcess
         if (node === null) return void (this.finished = true)
 
         let [i, d1] = node
-        if (i === this.graph.index(this.end)) return void (this.finished = true)
+        if (i === this.endIndex) return void (this.finished = true)
 
         for (let edge of this.graph.nodes[i].edges)
         {
@@ -106,18 +115,27 @@ export class DijkstrasAlgorithm extends MazeProcess
 
     public override render(c: CanvasRenderingContext2D)
     {
-        c.fillStyle = "#00ff00"
+        let w = c.canvas.width / (2 * this.maze.width + 1), h = c.canvas.height / (2 * this.maze.height + 1)
+
+        c.fillStyle = SEARCH
         for (let n = 0; n < this.set.length; n++)
         {
             let [from, _] = this.set[n]
             if (from !== n) this.renderEdge(c, n, from)
         }
 
-        if (!this.finished) return
-        c.fillStyle = "#ff0000"
+        c.fillStyle = ACTIVE
+        for (let [n, _] of this.queue.heap)
+        {
+            let [i, j] = this.graph.nodes[n].position
+            c.fillRect((2 * i + 1) * w, (2 * j + 1) * h, w, h)
+        }
 
-        let n = this.graph.index(this.end)
-        while (n !== this.graph.index(this.start))
+        if (!this.finished) return
+        c.fillStyle = PATH
+
+        let n = this.endIndex
+        while (n !== this.startIndex)
         {
             let [from, _] = this.set[n]
             this.renderEdge(c, n, from)

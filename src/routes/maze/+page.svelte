@@ -13,7 +13,7 @@ import { RecursiveDivision } from "$lib/maze/RecursiveDivision"
 import BraidMaze from "../../lib/maze/BraidMaze"
 import { DijkstrasAlgorithm, AStarAlgorithm } from "../../lib/maze/Pathfinding"
 
-const SIZE: number = 20
+const SIZE: number = 10
 
 let canvas: HTMLCanvasElement
 let c: CanvasRenderingContext2D
@@ -27,12 +27,15 @@ let iterations: number = 5
 onMount(() =>
 {
     c = canvas.getContext("2d")!
-    resize()
 
-    let ratio = window.devicePixelRatio
-    let width = Math.floor(canvas.width / ratio / SIZE), height = Math.floor(canvas.height / ratio / SIZE)
+    let width = Math.ceil(canvas.scrollWidth / SIZE), height = Math.ceil(canvas.scrollHeight / SIZE)
+    if (width % 2 === 0) width += 1
+    if (height % 2 === 0) height += 1
 
-    maze = new Maze(width, height, 3)
+    canvas.width = width * SIZE
+    canvas.height = height * SIZE
+
+    maze = new Maze((width - 1) / 2, (height - 1) / 2, 3)
     queue = []
 
     current = new PrimsAlgorithm(maze)
@@ -67,19 +70,11 @@ function loop()
     requestAnimationFrame(loop)
 }
 
-function resize()
-{
-    let ratio = window.devicePixelRatio
-    canvas.width = canvas.scrollWidth * ratio
-    canvas.height = canvas.scrollHeight * ratio
-}
-
 </script>
 
 <svelte:head>
     <title>Maze Generation Algorithms</title>
 </svelte:head>
-<svelte:window on:resize={resize} />
 <div class="main">
     <canvas bind:this={canvas}></canvas>
     <div class="controls">
@@ -121,8 +116,10 @@ function resize()
 
 canvas {
     width: 100%;
+    height: 0;
     flex-grow: 1;
     background-color: #ffffff;
+    image-rendering: pixelated;
 }
 
 .controls {

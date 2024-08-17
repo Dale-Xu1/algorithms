@@ -10,10 +10,12 @@ import TimSort from "../../lib/sorting/TimSort"
 import BitonicSort from "../../lib/sorting/BitonicSort"
 import { RadixSortLSD, RadixSortMSD } from "../../lib/sorting/RadixSort"
 
+const LENGTH: number = 1000
+
 let canvas: HTMLCanvasElement
 let c: CanvasRenderingContext2D
 
-let graph: Graph = new Graph(1000, 2)
+let graph: Graph = new Graph(LENGTH, 2)
 let queue: GraphProcess[] = []
 let current: GraphProcess | null = null
 
@@ -56,8 +58,10 @@ function loop()
 function resize()
 {
     let ratio = window.devicePixelRatio
-    canvas.width = canvas.scrollWidth * ratio
-    canvas.height = canvas.scrollHeight * ratio
+    let width = Math.ceil(canvas.scrollWidth * ratio / LENGTH), height = Math.ceil(canvas.scrollHeight * ratio / LENGTH)
+
+    canvas.width = width * LENGTH
+    canvas.height = height * LENGTH
 }
 
 </script>
@@ -106,6 +110,7 @@ function resize()
 
 canvas {
     width: 100%;
+    height: 0;
     flex-grow: 1;
     background-color: #000000;
 }

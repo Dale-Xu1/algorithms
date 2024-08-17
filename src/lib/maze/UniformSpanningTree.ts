@@ -1,5 +1,7 @@
 import Maze, { MazeProcess } from "./Maze"
 
+const ACTIVE: string = "#5050ff"
+
 export class AldousBroderAlgorithm extends MazeProcess
 {
 
@@ -55,8 +57,8 @@ export class AldousBroderAlgorithm extends MazeProcess
         let w = c.canvas.width / (2 * maze.width + 1), h = c.canvas.height / (2 * maze.height + 1)
         let [i, j] = this.position
 
-        c.fillStyle = "#0000ff"
-        c.fillRect((2 * i + 1) * w, (2 * j + 1) * h, w + 1, h + 1)
+        c.fillStyle = ACTIVE
+        c.fillRect((2 * i + 1) * w, (2 * j + 1) * h, w, h)
     }
 
 }
@@ -166,11 +168,11 @@ export class WilsonsAlgorithm extends MazeProcess
         let maze = this.maze
         let w = c.canvas.width / (2 * maze.width + 1), h = c.canvas.height / (2 * maze.height + 1)
 
-        c.fillStyle = "#0000ff"
+        c.fillStyle = ACTIVE
         if (this.walk.length === 1)
         {
             let [i, j] = this.walk[0]
-            c.fillRect((2 * i + 1) * w, (2 * j + 1) * h, w + 1, h + 1)
+            c.fillRect((2 * i + 1) * w, (2 * j + 1) * h, w, h)
         }
         else for (let n = 0; n < this.walk.length - 1; n++)
         {
