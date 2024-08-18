@@ -481,6 +481,8 @@ export default class TimSort extends GraphProcess
         if (this.generator.next().done) this.finished = true
     }
 
+    public override toString(): string { return "Tim" }
+
     // private *sort(run: Run): Generator<void, [number, number], void>
     // {
     //     if (run instanceof Array)
@@ -489,7 +491,7 @@ export default class TimSort extends GraphProcess
     //         return run
     //     }
 
-    //     let [left, _] = yield *this.sort(run.left)
+    //     let [left] = yield *this.sort(run.left)
     //     let [middle, right] = yield *this.sort(run.right)
 
     //     yield *this.merge(left, middle, right)

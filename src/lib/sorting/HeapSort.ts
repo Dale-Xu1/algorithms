@@ -56,6 +56,8 @@ export default class HeapSort extends GraphProcess
         if (this.generator.next().done) this.finished = true
     }
 
+    public override toString(): string { return "Heap" }
+
     // private heapified: boolean = false
     // private n!: number
 

@@ -60,6 +60,8 @@ export abstract class GraphProcess
     public abstract init(): void
     public abstract update(): void
 
+    public abstract toString(): string
+
 }
 
 export class Shuffle extends GraphProcess
@@ -82,5 +84,7 @@ export class Shuffle extends GraphProcess
 
         this.i++
     }
+
+    public override toString(): string { return "Shuffle" }
 
 }

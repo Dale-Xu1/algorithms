@@ -61,6 +61,8 @@ export class AldousBroderAlgorithm extends MazeProcess
         c.fillRect((2 * i + 1) * w, (2 * j + 1) * h, w, h)
     }
 
+    public override toString(): string { return "Aldous-Broder" }
+
 }
 
 const enum State { NULL, WALK, MAZE }
@@ -181,5 +183,7 @@ export class WilsonsAlgorithm extends MazeProcess
             else if (j === l) c.fillRect((2 * Math.min(i, k) + 1) * w, (2 * j + 1) * h, 3 * w, h)
         }
     }
+
+    public override toString(): string { return "Wilson" }
 
 }

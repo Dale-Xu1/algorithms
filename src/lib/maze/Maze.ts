@@ -231,6 +231,7 @@ export abstract class MazeProcess
     public abstract update(): void
 
     public render(c: CanvasRenderingContext2D) { }
+    public abstract toString(): string
 
 }
 

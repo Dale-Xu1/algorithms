@@ -51,4 +51,6 @@ export class RecursiveDivision extends MazeProcess
         if (this.generator.next().done) this.finished = true
     }
 
+    public override toString(): string { return "Recursive Division" }
+
 }

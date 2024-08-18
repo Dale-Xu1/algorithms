@@ -50,6 +50,8 @@ export class QuickSortLL extends GraphProcess
         if (this.generator.next().done) this.finished = true
     }
 
+    public override toString(): string { return "Quick (LL)" }
+
 }
 
 export class QuickSortLR extends GraphProcess
@@ -91,6 +93,8 @@ export class QuickSortLR extends GraphProcess
     {
         if (this.generator.next().done) this.finished = true
     }
+
+    public override toString(): string { return "Quick (LR)" }
 
 //     private readonly stack: [number, number][] = []
 

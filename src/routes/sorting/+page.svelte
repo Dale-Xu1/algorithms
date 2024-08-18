@@ -33,7 +33,7 @@ function loop()
 {
     if (current === null && queue.length > 0)
     {
-        current = queue.shift()!
+        [current, ...queue] = queue
         current.init()
     }
 
@@ -75,19 +75,27 @@ function resize()
     <div class="controls">
         <span>Iterations/frame:</span>
         <input type="number" bind:value={iterations}>
-        <button on:click={() => queue.push(new Shuffle(graph))}>Shuffle</button>
-        <button on:click={() => queue.push(new BubbleSort(graph))}>Bubble</button>
-        <button on:click={() => queue.push(new InsertionSort(graph))}>Insertion</button>
-        <button on:click={() => queue.push(new SelectionSort(graph))}>Selection</button>
-        <button on:click={() => queue.push(new ShellSort(graph))}>Shell</button>
-        <button on:click={() => queue.push(new QuickSortLL(graph))}>Quick (LL)</button>
-        <button on:click={() => queue.push(new QuickSortLR(graph))}>Quick (LR)</button>
-        <button on:click={() => queue.push(new MergeSort(graph))}>Merge</button>
-        <button on:click={() => queue.push(new HeapSort(graph))}>Heap</button>
-        <button on:click={() => queue.push(new TimSort(graph))}>Tim</button>
-        <button on:click={() => queue.push(new BitonicSort(graph))}>Bitonic</button>
-        <button on:click={() => queue.push(new RadixSortLSD(graph))}>Radix (LSD)</button>
-        <button on:click={() => queue.push(new RadixSortMSD(graph))}>Radix (MSD)</button>
+        <button on:click={() => queue = []}>Clear Queue</button>
+        <button on:click={() => queue = [...queue, new Shuffle(graph)]}>Shuffle</button>
+        <button on:click={() => queue = [...queue, new BubbleSort(graph)]}>Bubble</button>
+        <button on:click={() => queue = [...queue, new InsertionSort(graph)]}>Insertion</button>
+        <button on:click={() => queue = [...queue, new SelectionSort(graph)]}>Selection</button>
+        <button on:click={() => queue = [...queue, new ShellSort(graph)]}>Shell</button>
+        <button on:click={() => queue = [...queue, new QuickSortLL(graph)]}>Quick (LL)</button>
+        <button on:click={() => queue = [...queue, new QuickSortLR(graph)]}>Quick (LR)</button>
+        <button on:click={() => queue = [...queue, new MergeSort(graph)]}>Merge</button>
+        <button on:click={() => queue = [...queue, new HeapSort(graph)]}>Heap</button>
+        <button on:click={() => queue = [...queue, new TimSort(graph)]}>Tim</button>
+        <button on:click={() => queue = [...queue, new BitonicSort(graph)]}>Bitonic</button>
+        <button on:click={() => queue = [...queue, new RadixSortLSD(graph)]}>Radix (LSD)</button>
+        <button on:click={() => queue = [...queue, new RadixSortMSD(graph)]}>Radix (MSD)</button>
+        {#if queue.length > 0}
+            <div class="queue">
+                {#each queue as process}
+                    <span>{process}</span>
+                {/each}
+            </div>
+        {/if}
     </div>
 </div>
 <style>
@@ -142,6 +150,27 @@ button {
 
 button:hover {
     background-color: #dddddd;
+}
+
+.queue {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    right: 0;
+    max-height: 75vh;
+    padding: 4px 8px;
+    background-color: #ffffff99;
+    overflow-y: scroll;
+}
+
+.queue::-webkit-scrollbar {
+    display: none;
+}
+
+.queue span {
+    margin: 2px;
+    font-size: 12px;
 }
 
 </style>

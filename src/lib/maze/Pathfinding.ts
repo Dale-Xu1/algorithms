@@ -101,7 +101,7 @@ export class DijkstrasAlgorithm extends MazeProcess
 
         for (let edge of this.graph.nodes[i].edges)
         {
-            let [_, d2] = this.set[edge.node]
+            let [, d2] = this.set[edge.node]
             let position = this.graph.nodes[edge.node].position
 
             let weight = d1 + edge.weight
@@ -120,12 +120,12 @@ export class DijkstrasAlgorithm extends MazeProcess
         c.fillStyle = SEARCH
         for (let n = 0; n < this.set.length; n++)
         {
-            let [from, _] = this.set[n]
+            let [from] = this.set[n]
             if (from !== n) this.renderEdge(c, n, from)
         }
 
         c.fillStyle = ACTIVE
-        for (let [n, _] of this.queue.heap)
+        for (let [n] of this.queue.heap)
         {
             let [i, j] = this.graph.nodes[n].position
             c.fillRect((2 * i + 1) * w, (2 * j + 1) * h, w, h)
@@ -137,7 +137,7 @@ export class DijkstrasAlgorithm extends MazeProcess
         let n = this.endIndex
         while (n !== this.startIndex)
         {
-            let [from, _] = this.set[n]
+            let [from] = this.set[n]
             this.renderEdge(c, n, from)
 
             n = from
@@ -155,6 +155,8 @@ export class DijkstrasAlgorithm extends MazeProcess
         else if (j === l) c.fillRect((2 * Math.min(i, k) + 1) * w, (2 * j + 1) * h, 3 * w, h)
     }
 
+    public override toString(): string { return "Dijkstra" }
+
 }
 
 export class AStarAlgorithm extends DijkstrasAlgorithm
@@ -167,5 +169,7 @@ export class AStarAlgorithm extends DijkstrasAlgorithm
 
         return weight + distance
     }
+
+    public override toString(): string { return "A*" }
 
 }

@@ -55,6 +55,8 @@ export class RadixSortLSD extends GraphProcess
         if (this.generator.next().done) this.finished = true
     }
 
+    public override toString(): string { return "Radix (LSD)" }
+
 }
 
 export class RadixSortMSD extends GraphProcess
@@ -125,5 +127,7 @@ export class RadixSortMSD extends GraphProcess
     {
         if (this.generator.next().done) this.finished = true
     }
+
+    public override toString(): string { return "Radix (MSD)" }
 
 }

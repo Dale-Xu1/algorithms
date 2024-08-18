@@ -89,4 +89,6 @@ export default class EllersAlgorithm extends MazeProcess
         if (this.generator.next().done) this.finished = true
     }
 
+    public override toString(): string { return "Eller" }
+
 }

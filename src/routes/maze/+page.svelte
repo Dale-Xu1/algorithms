@@ -36,8 +36,6 @@ onMount(() =>
     canvas.height = height * SIZE
 
     maze = new Maze((width - 1) / 2, (height - 1) / 2, 3)
-    queue = []
-
     current = new PrimsAlgorithm(maze)
     current.init()
 
@@ -48,7 +46,7 @@ function loop()
 {
     if (current.finished && queue.length > 0)
     {
-        current = queue.shift()!
+        [current, ...queue] = queue
         current.init()
     }
 
@@ -70,6 +68,7 @@ function loop()
     requestAnimationFrame(loop)
 }
 
+// TODO: Display queue in HTML
 </script>
 
 <svelte:head>
@@ -80,20 +79,28 @@ function loop()
     <div class="controls">
         <span>Iterations/frame:</span>
         <input type="number" bind:value={iterations}>
-        <button on:click={() => queue.push(new PrimsAlgorithm(maze))}>Prim</button>
-        <button on:click={() => queue.push(new KruskalsAlgorithm(maze))}>Kruskal</button>
-        <button on:click={() => queue.push(new DepthFirstSearch(maze))}>DFS</button>
-        <button on:click={() => queue.push(new BreadthFirstSearch(maze))}>BFS</button>
-        <button on:click={() => queue.push(new HuntAndKill(maze))}>Hunt and Kill</button>
-        <button on:click={() => queue.push(new EllersAlgorithm(maze))}>Eller</button>
-        <button on:click={() => queue.push(new AldousBroderAlgorithm(maze))}>Aldous-Broder</button>
-        <button on:click={() => queue.push(new WilsonsAlgorithm(maze))}>Wilson</button>
-        <button on:click={() => queue.push(new RecursiveDivision(maze))}>Recursive Division</button>
-        <button on:click={() => queue.push(new BinaryTreeAlgorithm(maze))}>Binary Tree</button>
-        <button on:click={() => queue.push(new SidewinderAlgorithm(maze))}>Sidewinder</button>
-        <button on:click={() => queue.push(new BraidMaze(maze))}>Braid</button>
-        <button on:click={() => queue.push(new DijkstrasAlgorithm(maze))}>Dijkstra</button>
-        <button on:click={() => queue.push(new AStarAlgorithm(maze))}>A*</button>
+        <button on:click={() => queue = []}>Clear Queue</button>
+        <button on:click={() => queue = [...queue, new PrimsAlgorithm(maze)]}>Prim</button>
+        <button on:click={() => queue = [...queue, new KruskalsAlgorithm(maze)]}>Kruskal</button>
+        <button on:click={() => queue = [...queue, new DepthFirstSearch(maze)]}>DFS</button>
+        <button on:click={() => queue = [...queue, new BreadthFirstSearch(maze)]}>BFS</button>
+        <button on:click={() => queue = [...queue, new HuntAndKill(maze)]}>Hunt and Kill</button>
+        <button on:click={() => queue = [...queue, new EllersAlgorithm(maze)]}>Eller</button>
+        <button on:click={() => queue = [...queue, new AldousBroderAlgorithm(maze)]}>Aldous-Broder</button>
+        <button on:click={() => queue = [...queue, new WilsonsAlgorithm(maze)]}>Wilson</button>
+        <button on:click={() => queue = [...queue, new RecursiveDivision(maze)]}>Recursive Division</button>
+        <button on:click={() => queue = [...queue, new BinaryTreeAlgorithm(maze)]}>Binary Tree</button>
+        <button on:click={() => queue = [...queue, new SidewinderAlgorithm(maze)]}>Sidewinder</button>
+        <button on:click={() => queue = [...queue, new BraidMaze(maze)]}>Braid</button>
+        <button on:click={() => queue = [...queue, new DijkstrasAlgorithm(maze)]}>Dijkstra</button>
+        <button on:click={() => queue = [...queue, new AStarAlgorithm(maze)]}>A*</button>
+        {#if queue.length > 0}
+            <div class="queue">
+                {#each queue as process}
+                    <span>{process}</span>
+                {/each}
+            </div>
+        {/if}
     </div>
 </div>
 <style>
@@ -149,6 +156,27 @@ button {
 
 button:hover {
     background-color: #dddddd;
+}
+
+.queue {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    right: 0;
+    max-height: 75vh;
+    padding: 4px 8px;
+    background-color: #ffffff99;
+    overflow-y: scroll;
+}
+
+.queue::-webkit-scrollbar {
+    display: none;
+}
+
+.queue span {
+    margin: 2px;
+    font-size: 12px;
 }
 
 </style>

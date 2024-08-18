@@ -47,4 +47,6 @@ export default class BitonicSort extends GraphProcess
         if (this.generator.next().done) this.finished = true
     }
 
+    public override toString(): string { return "Bitonic" }
+
 }

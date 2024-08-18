@@ -54,4 +54,6 @@ export default class BraidMaze extends MazeProcess
         return count
     }
 
+    public override toString(): string { return "Braid" }
+
 }

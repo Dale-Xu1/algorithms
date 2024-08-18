@@ -40,6 +40,8 @@ export class SidewinderAlgorithm extends MazeProcess
         if (this.generator.next().done) this.finished = true
     }
 
+    public override toString(): string { return "Sidewinder" }
+
 }
 
 export class BinaryTreeAlgorithm extends MazeProcess
@@ -73,5 +75,7 @@ export class BinaryTreeAlgorithm extends MazeProcess
     {
         if (this.generator.next().done) this.finished = true
     }
+
+    public override toString(): string { return "Binary Tree" }
 
 }

@@ -55,6 +55,8 @@ export class PrimsAlgorithm extends MazeProcess
         }
     }
 
+    public override toString(): string { return "Prim" }
+
 }
 
 export class KruskalsAlgorithm extends MazeProcess
@@ -121,5 +123,7 @@ export class KruskalsAlgorithm extends MazeProcess
             this.rank[i][j]++
         }
     }
+
+    public override toString(): string { return "Kruskal" }
 
 }

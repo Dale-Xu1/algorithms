@@ -59,6 +59,8 @@ export class DepthFirstSearch extends MazeProcess
         maze.enable([i, j], [k, l])
     }
 
+    public override toString(): string { return "Depth First Search" }
+
 }
 
 export class BreadthFirstSearch extends MazeProcess
@@ -112,6 +114,8 @@ export class BreadthFirstSearch extends MazeProcess
             this.active.push([edge.node, [i, j]])
         }
     }
+
+    public override toString(): string { return "Breadth First Search" }
 
 }
 
@@ -184,5 +188,7 @@ export class HuntAndKill extends MazeProcess
 
         return null
     }
+
+    public override toString(): string { return "Hunt and Kill" }
 
 }

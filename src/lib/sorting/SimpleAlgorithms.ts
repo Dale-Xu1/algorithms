@@ -35,6 +35,8 @@ export class BubbleSort extends GraphProcess
         if (this.generator.next().done) this.finished = true
     }
 
+    public override toString(): string { return "Bubble" }
+
 //     private i: number = 0
 //     private j: number = 0
 
@@ -91,6 +93,8 @@ export class InsertionSort extends GraphProcess
         if (this.generator.next().done) this.finished = true
     }
 
+    public override toString(): string { return "Insertion" }
+
 //     private i: number = 0
 //     private j: number = 0
 
@@ -146,6 +150,8 @@ export class SelectionSort extends GraphProcess
         if (this.generator.next().done) this.finished = true
     }
 
+    public override toString(): string { return "Selection" }
+
 }
 
 export class ShellSort extends GraphProcess
@@ -184,5 +190,7 @@ export class ShellSort extends GraphProcess
     {
         if (this.generator.next().done) this.finished = true
     }
+
+    public override toString(): string { return "Shell" }
 
 }
