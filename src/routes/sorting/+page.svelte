@@ -161,11 +161,7 @@ button:hover {
     max-height: 75vh;
     padding: 4px 8px;
     background-color: #ffffff99;
-    overflow-y: scroll;
-}
-
-.queue::-webkit-scrollbar {
-    display: none;
+    overflow-y: auto;
 }
 
 .queue span {
